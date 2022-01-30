@@ -7,11 +7,35 @@ import {
   FileContainer,
   IconContainer,
   ZoomContainer,
+  FileIndexContainer,
+  FileIndex,
 } from "./styles";
 import Icon from "../Icon";
 
-const FileViewer = () => {
+const FileViewer = ({ data }) => {
   const [clickCount, setClickCount] = useState(0);
+  const [currentFile, setCurrentFile] = useState(0);
+
+  const length = data.length;
+
+  const nextFile = () => {
+    setCurrentFile(currentFile === length - 1 ? 0 : currentFile + 1);
+    setClickCount(0);
+  };
+
+  const prevFile = () => {
+    setCurrentFile(currentFile === 0 ? length - 1 : currentFile - 1);
+    setClickCount(0);
+  };
+
+  const moveFile = (index) => {
+    setCurrentFile(index);
+    setClickCount(0);
+  };
+
+  if (!Array.isArray(data) || data.length <= 0) {
+    return null;
+  }
 
   const zoomIn = () => {
     if (clickCount < 5) {
@@ -33,18 +57,36 @@ const FileViewer = () => {
           <IconContainer className="title">
             <Icon icon="PaperclipIcon" color="white" />
           </IconContainer>
-          <h3>img001.jpeg</h3>
+          <h3>{`${data[currentFile].file_name}${data[currentFile].extension}`}</h3>
         </FileTitle>
         <FileContainer scale={clickCount}>
-          <img
-            src="https://images.theconversation.com/files/125391/original/image-20160606-13080-s7o3qu.jpg?ixlib=rb-1.1.0&rect=273%2C0%2C2639%2C1379&q=45&auto=format&w=926&fit=clip"
-            alt="test"
-          />
+          {data.map((file, index) => (
+            <div
+              key={index}
+              className={
+                index === currentFile ? "slide active scale" : "slide scale"
+              }
+            >
+              {index === currentFile && (
+                <img src={file.src} alt={file.file_name} className="image" />
+              )}
+            </div>
+          ))}
         </FileContainer>
-        <IconContainer className="left-arrow">
+        <FileIndexContainer>
+          {data.map((file, index) => (
+            <FileIndex
+              key={index}
+              fileIndex={index}
+              currentFile={currentFile}
+              onClick={() => moveFile(index)}
+            />
+          ))}
+        </FileIndexContainer>
+        <IconContainer className="left-arrow" onClick={prevFile}>
           <Icon icon="ChevronLeftIcon" color="white" />
         </IconContainer>
-        <IconContainer className="right-arrow">
+        <IconContainer className="right-arrow" onClick={nextFile}>
           <Icon icon="ChevronRightIcon" color="white" />
         </IconContainer>
         <ZoomContainer>

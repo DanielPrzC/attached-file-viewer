@@ -9,7 +9,7 @@ export const ViewerWrapper = styled.div`
 `;
 
 export const ViewerContainer = styled.div`
-  width: 700px;
+  width: 600px;
   height: 400px;
   border-radius: 10px;
   background: #000;
@@ -65,40 +65,48 @@ export const FileTitle = styled.div`
 `;
 
 export const FileContainer = styled.div`
-  width: 65%;
+  width: 60%;
   height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   z-index: 1;
-  img {
+  .scale {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    ${({ scale }) =>
+      scale === 1 &&
+      css`
+        transform: scale(1.2);
+      `}
+    ${({ scale }) =>
+      scale === 2 &&
+      css`
+        transform: scale(1.4);
+      `}
+    ${({ scale }) =>
+      scale === 3 &&
+      css`
+        transform: scale(1.6);
+      `}
+    ${({ scale }) =>
+      scale === 4 &&
+      css`
+        transform: scale(1.8);
+      `}
+    ${({ scale }) =>
+      scale === 5 &&
+      css`
+        transform: scale(2);
+      `}
+  }
+  .image {
     width: 100%;
   }
-  ${({ scale }) =>
-    scale === 1 &&
-    css`
-      transform: scale(1.2);
-    `}
-  ${({ scale }) =>
-    scale === 2 &&
-    css`
-      transform: scale(1.4);
-    `}
-  ${({ scale }) =>
-    scale === 3 &&
-    css`
-      transform: scale(1.6);
-    `}
-  ${({ scale }) =>
-    scale === 4 &&
-    css`
-      transform: scale(1.8);
-    `}
-  ${({ scale }) =>
-    scale === 5 &&
-    css`
-      transform: scale(2);
-    `}
+  .slide {
+    opacity: 0;
+  }
+  .slide.active {
+    opacity: 1;
+  }
 `;
 
 export const IconContainer = styled.div`
@@ -128,4 +136,31 @@ export const ZoomContainer = styled.div`
       background: grey;
     }
   }
+`;
+
+export const FileIndexContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  position: absolute;
+  bottom: 72px;
+  z-index: 5;
+`;
+
+export const FileIndex = styled.div`
+  width: 24px;
+  height: 6px;
+  border-radius: 2px;
+  cursor: pointer;
+  ${({ fileIndex, currentFile }) =>
+    fileIndex === currentFile
+      ? css`
+          background: white;
+        `
+      : css`
+          background: grey;
+        `}
 `;
